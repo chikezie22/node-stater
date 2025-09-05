@@ -5,6 +5,7 @@ const db = require('better-sqlite3')('ourApp.db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const marked = require('marked');
 // improve db speed
 db.pragma('journal_mode = WAL');
 // data base starts here
@@ -54,6 +55,29 @@ app.use(express.static('public'));
 app.use(cookieParser());
 // middleware
 app.use(function (req, res, next) {
+  // make our markdown function available
+  res.locals.filterUserHTML = function (content) {
+    return sanitizeHTML(marked.parse(content), {
+      allowedTags: [
+        'p',
+        'br',
+        'ul',
+        'li',
+        'ol',
+        'strong',
+        'bold',
+        'i',
+        'em',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+      ],
+      allowedAttributes: {},
+    });
+  };
   res.locals.errors = [];
   // try to decode incoming cookie
   try {
@@ -69,7 +93,9 @@ app.use(function (req, res, next) {
 
 app.get('/', (req, res) => {
   if (req.user) {
-    const postStatement = db.prepare(`SELECT * FROM posts WHERE authorid = ?`);
+    const postStatement = db.prepare(
+      `SELECT * FROM posts WHERE authorid = ? ORDER BY createdDate DESC`
+    );
     const posts = postStatement.all(req.user.userId);
     const username = req.user.userName;
     return res.render('dashboard', { posts, username });
