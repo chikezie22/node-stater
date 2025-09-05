@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('includes/head.ejs') %>
+  <body>
+    <%- include('includes/header.ejs') %>
+    <main>
+      <form action="/edit-post/<%= post.id  %>" method="POST">
+        <% errors.forEach(error=> {%>
+        <p class="notice"><%= error %></p>
+        <% }) %>
+        <fieldset>
+          <legend>Edit Post</legend>
+          <label for="title"><small>Title</small></label>
+          <input
+            value="<%= post.title  %>"
+            type="text"
+            id="title"
+            name="title"
+            autocomplete="off"
+          />
+          <label for="body"><small>Content</small></label>
+          <textarea name="body" id="body">
+            <%= post.body %>
+          </textarea>
+          <br />
+          <button>Update Post</button>
+        </fieldset>
+      </form>
+    </main>
+    <%- include('includes/footer.ejs') %>
+  </body>
+</html>

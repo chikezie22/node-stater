@@ -4,13 +4,23 @@
   <body>
     <%- include('includes/header.ejs') %>
     <main>
-      <h2>Welcome to your dashboard</h2>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda exercitationem repellat
-        adipisci facilis nulla vel fugiat tempore ex nostrum. Deserunt aliquam nesciunt similique
-        qui reprehenderit asperiores vero reiciendis excepturi, hic dicta eum eos, veritatis quo
-        illum? Dicta corporis expedita magni?
-      </p>
+      <% if(posts.length === 0){ %>
+      <h4>Hey 👋 <%= username %>, you have no posts</h4>
+      <% } else{%>
+      <h4>Hey 👋 <%= username %>, here are your posts</h4>
+      <% } %>
+
+      <ul>
+        <% posts.forEach(post=>{%>
+        <li>
+          <a href="/post/<%= post.id %> ">
+            <%= post.title %> on <%= new Date(post.createdDate).getDate() %>/<%= new
+            Date(post.createdDate).getMonth() + 1 %>/<%= new Date(post.createdDate).getFullYear() %>
+          </a>
+        </li>
+
+        <% }) %>
+      </ul>
     </main>
     <%- include('includes/footer.ejs') %>
   </body>

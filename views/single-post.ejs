@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('includes/head.ejs') %>
+  <body>
+    <%- include('includes/header.ejs') %>
+    <main>
+      <h1><%= post.title %></h1>
+      <article>
+        <small
+          >posted by <%= post.username %> on <%= new Date(post.createdDate).getDate() %>/<%= new
+          Date(post.createdDate).getMonth() + 1 %>/<%= new Date(post.createdDate).getFullYear() %>
+        </small>
+        <div><%= post.body %></div>
+      </article>
+      <% if (isAuthor){%>
+
+      <a href="/edit-post/<%= post.id %>" class="button"> Edit Post</a>
+      <form action="/delete-post/<%= post.id %>" method="POST" style="display: inline">
+        <button>Delete Post</button>
+      </form>
+
+      <%} %>
+    </main>
+    <%- include('includes/footer.ejs') %>
+  </body>
+</html>
